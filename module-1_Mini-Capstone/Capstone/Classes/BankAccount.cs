@@ -24,6 +24,11 @@ namespace Capstone.Classes
             this.Balance = 0M;
         }
 
+        public void SubtractFromBalance(decimal price)
+        {
+            Balance -= price;
+        }
+
 
     }
 }

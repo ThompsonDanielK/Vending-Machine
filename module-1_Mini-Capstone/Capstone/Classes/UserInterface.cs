@@ -62,11 +62,12 @@ namespace Capstone.Classes
 
             while (!done)
             {
+                decimal runningBalance = bankAccount.Balance;
 
                 Console.WriteLine("(1) Add Money");
                 Console.WriteLine("(2) Select Products");
                 Console.WriteLine("(3) Complete Transaction");
-                Console.WriteLine($"Current Account Balance: {bankAccount.Balance.ToString("C")}");
+                Console.WriteLine($"Current Account Balance: {runningBalance.ToString("C")}");
 
                 string userInput = Console.ReadLine();
 
@@ -90,10 +91,28 @@ namespace Capstone.Classes
 
                     case "2":
                         //Catering app
+                        Console.Write("Please input a product ID: ");
+                        string userInputID = Console.ReadLine().ToUpper();
+
+                        Console.WriteLine();
+
+                        Console.Write("Please input your desired quantity: ");
+                        int userInputQuantity = int.Parse(Console.ReadLine());
+
+                        string[] orderProducts = new string[2];
+                        orderProducts = catering.SelectProducts(userInputID, userInputQuantity);
+
+                        Console.WriteLine(orderProducts[0]);
+                        if (bankAccount.Balance - decimal.Parse(orderProducts[1]))
+                        {
+
+                        }
+                        bankAccount.SubtractFromBalance(decimal.Parse(orderProducts[1]));
                         break;
 
                     case "3":
                         //Closing actions
+
                         done = true;
                         break;
 
