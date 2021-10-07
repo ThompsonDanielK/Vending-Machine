@@ -15,11 +15,12 @@ namespace Capstone.Classes
         //string filePath = @"C:\Catering\cateringsystem.csv";
         private string filePath = @"C:\Catering\";
 
-        
-        public void ReadInventoryFile()
-        {
 
-            using (StreamReader reader = new StreamReader(Path.Combine(filePath,"cateringsystem.csv"))
+        public List<CateringItem> ReadInventoryFile()
+        {
+        List<CateringItem> inventoryList = new List<CateringItem>();
+
+            using (StreamReader reader = new StreamReader(Path.Combine(filePath, "cateringsystem.csv")))
             {
                 while (!reader.EndOfStream)
                 {
@@ -30,11 +31,12 @@ namespace Capstone.Classes
                     //ItemType | ProductCode | Name | Price
                     //Add to items List
 
-                    List<CateringItem> item = new List<CateringItem>();
-                    item.Add(inventoryLine[0], inventoryLine[1], inventoryLine[2], inventoryLine[3]);
+                    inventoryList.Add(new CateringItem(inventoryLine[0], inventoryLine[1], inventoryLine[2], Convert.ToDecimal(inventoryLine[3])));
                 }
             }
-
+            return inventoryList;
         }
     }
 }
+
+

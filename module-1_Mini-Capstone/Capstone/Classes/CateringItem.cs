@@ -9,22 +9,41 @@ namespace Capstone.Classes
     /// </summary>
     public class CateringItem
     {
-        public string Name { get; set; }
+        public string Name { get; }
 
-        public decimal Price { get; set; }
+        public decimal Price { get; }
 
-        public string ItemType { get; set; }
+        public string ItemType {get; }
 
-        public string ProductCode { get; set; }
+        public string ProductCode { get; }
 
+        public string ProductCodeName
+        {
+            get
+            {
+                switch (ItemType)
+                {
+                    case "B":
+                        return "Beverage";
+                    case "E":
+                        return "Entree";
+                    case "D":
+                        return "Dessert";
+                    case "A":
+                        return "Appetizer";
+                    default:
+                        return "";
+                }
+            }
+        }
         public int Quantity { get; set; } = 25;
 
-        public CateringItem(string name, decimal price, string itemType, string productCode)
+        public CateringItem(string itemType, string productCode, string name, decimal price)
         {
-            this.Name = name;
-            this.Price = price;
             this.ItemType = itemType;
             this.ProductCode = productCode;            
+            this.Name = name;
+            this.Price = price;
         }
     }
 }

@@ -10,11 +10,15 @@ namespace Capstone.Classes
     /// </summary>
     public class UserInterface
     {
-        private Catering catering = new Catering();
 
         public void RunMainMenu()
         {
             //Run input file method to create inventory
+            FileAccess fileAccess = new FileAccess();
+            
+            Catering catering = new Catering(fileAccess.ReadInventoryFile());
+
+            
 
 
             bool done = false;
@@ -23,7 +27,7 @@ namespace Capstone.Classes
             {
                 Console.WriteLine("​(1) Display Catering Items");
                 Console.WriteLine("​(2) Order");
-                Console.WriteLine(​"(3) Quit");
+                //Console.WriteLine(​"(3) Quit");
 
                 Console.ReadLine();
             }
