@@ -11,28 +11,29 @@ namespace Capstone.Classes
     public class UserInterface
     {
 
+            Catering catering = new Catering();
+            BankAccount bankAccount = new BankAccount();
+            FileAccess fileAccess = new FileAccess();
         public void RunMainMenu()
         {
             //Run input file method to create inventory
-            Catering catering = new Catering();
-            FileAccess fileAccess = new FileAccess();
-
             fileAccess.ReadInventoryFile(catering);
 
-            
+
 
 
             bool done = false;
 
             while (!done)
             {
-                
+
                 Console.WriteLine("(1) Display Catering Items");
                 Console.WriteLine("(2) Order");
                 Console.WriteLine("(3) Quit");
 
-               string userInput = Console.ReadLine();
-               Console.WriteLine();
+                string userInput = Console.ReadLine();
+                Console.WriteLine();
+                Console.Clear();
 
                 switch (userInput)
                 {
@@ -44,23 +45,62 @@ namespace Capstone.Classes
                         break;
 
                     case "2":
-                    //   return Order();
+                        PurchaseMenu();
+                        break;
 
                     case "3":
                         done = true;
                         break;
                 }
-                        Console.WriteLine();
+                Console.WriteLine();
 
             }
         }
-            public void PurchaseMenu()
+        public void PurchaseMenu()
         {
-            Console.WriteLine("(1) Add Money");
-            Console.WriteLine("(2) Select Products");
-            Console.WriteLine("(3) Complete Transaction");
-            Console.WriteLine($"Current Account Balance: "); //Add in proper balance
+            bool done = false;
 
+            while (!done)
+            {
+
+                Console.WriteLine("(1) Add Money");
+                Console.WriteLine("(2) Select Products");
+                Console.WriteLine("(3) Complete Transaction");
+                Console.WriteLine($"Current Account Balance: {bankAccount.Balance.ToString("C")}");
+
+                string userInput = Console.ReadLine();
+
+                switch (userInput)
+                {
+                    case "1":
+                        //Banking app
+                        Console.Write("How much money would you like to deposit: ");                        
+                        decimal depositAmount = decimal.Parse(Console.ReadLine());;
+                        decimal overageAmount = bankAccount.Balance + depositAmount - 4200M;
+                        if (!bankAccount.AddMoney(depositAmount))
+                        {
+                            Console.WriteLine($"You can only have a maximum of $4,200");
+                            Console.WriteLine($"Only {(depositAmount - overageAmount).ToString("C")} was deposited to your account.");
+                        }
+                        else
+                        {
+                            Console.WriteLine($"{depositAmount.ToString("C")} has been deposited to your account.");
+                        }
+                        break;
+
+                    case "2":
+                        //Catering app
+                        break;
+
+                    case "3":
+                        //Closing actions
+                        done = true;
+                        break;
+
+                    default:
+                        break;
+                }
+            }
         }
     }
 }
