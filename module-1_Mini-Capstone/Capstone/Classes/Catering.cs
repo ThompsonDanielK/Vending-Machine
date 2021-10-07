@@ -9,18 +9,11 @@ namespace Capstone.Classes
     /// </summary>
     public class Catering
     {
-        //private List<CateringItem> items = new List<CateringItem>();
+        public List<CateringItem> items = new List<CateringItem>();
 
-        public Catering(List<CateringItem> inventory) { }
+       // public Catering(List<CateringItem> inventory) { }
 
         public List<CateringItem> Inventory { get; }
-        
-        public void DisplayCateringItems()
-        {
-            foreach (CateringItem item in )
-            {
-
-            }
-        }
+       
     }
 }

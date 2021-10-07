@@ -45,5 +45,14 @@ namespace Capstone.Classes
             this.Name = name;
             this.Price = price;
         }
+
+        public string DisplayInfo()
+        {
+            if (Quantity < 1)
+            {
+                return $"{ProductCodeName} {Name} {Price} SOLD OUT";
+            }
+            return $"{ProductCodeName} {Name} {Price} {Quantity}";
+        }
     }
 }

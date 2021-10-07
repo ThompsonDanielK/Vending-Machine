@@ -14,9 +14,10 @@ namespace Capstone.Classes
         public void RunMainMenu()
         {
             //Run input file method to create inventory
+            Catering catering = new Catering();
             FileAccess fileAccess = new FileAccess();
-            
-            Catering catering = new Catering(fileAccess.ReadInventoryFile());
+
+            fileAccess.ReadInventoryFile(catering);
 
             
 
@@ -25,11 +26,32 @@ namespace Capstone.Classes
 
             while (!done)
             {
-                Console.WriteLine("​(1) Display Catering Items");
-                Console.WriteLine("​(2) Order");
-                //Console.WriteLine(​"(3) Quit");
+                
+                Console.WriteLine("(1) Display Catering Items");
+                Console.WriteLine("(2) Order");
+                Console.WriteLine("(3) Quit");
 
-                Console.ReadLine();
+               string userInput = Console.ReadLine();
+               Console.WriteLine();
+
+                switch (userInput)
+                {
+                    case "1":
+                        foreach (CateringItem item in catering.items)
+                        {
+                            Console.WriteLine(item.DisplayInfo());
+                        }
+                        break;
+
+                    case "2":
+                    //   return Order();
+
+                    case "3":
+                        done = true;
+                        break;
+                }
+                        Console.WriteLine();
+
             }
         }
             public void PurchaseMenu()

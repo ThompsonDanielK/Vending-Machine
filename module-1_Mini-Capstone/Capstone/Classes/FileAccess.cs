@@ -15,8 +15,8 @@ namespace Capstone.Classes
         //string filePath = @"C:\Catering\cateringsystem.csv";
         private string filePath = @"C:\Catering\";
 
-
-        public List<CateringItem> ReadInventoryFile()
+      
+        public void ReadInventoryFile(Catering catering)
         {
         List<CateringItem> inventoryList = new List<CateringItem>();
 
@@ -31,10 +31,10 @@ namespace Capstone.Classes
                     //ItemType | ProductCode | Name | Price
                     //Add to items List
 
-                    inventoryList.Add(new CateringItem(inventoryLine[0], inventoryLine[1], inventoryLine[2], Convert.ToDecimal(inventoryLine[3])));
+                    catering.items.Add(new CateringItem(inventoryLine[0], inventoryLine[1], inventoryLine[2], Convert.ToDecimal(inventoryLine[3])));
                 }
             }
-            return inventoryList;
+            
         }
     }
 }
