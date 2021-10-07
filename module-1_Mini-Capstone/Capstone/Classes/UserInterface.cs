@@ -11,9 +11,9 @@ namespace Capstone.Classes
     public class UserInterface
     {
 
-            Catering catering = new Catering();
-            BankAccount bankAccount = new BankAccount();
-            FileAccess fileAccess = new FileAccess();
+        Catering catering = new Catering();
+        BankAccount bankAccount = new BankAccount();
+        FileAccess fileAccess = new FileAccess();
         public void RunMainMenu()
         {
             //Run input file method to create inventory
@@ -75,8 +75,8 @@ namespace Capstone.Classes
                 {
                     case "1":
                         //Banking app
-                        Console.Write("How much money would you like to deposit: ");                        
-                        decimal depositAmount = decimal.Parse(Console.ReadLine());;
+                        Console.Write("How much money would you like to deposit: ");
+                        decimal depositAmount = decimal.Parse(Console.ReadLine()); ;
                         decimal overageAmount = bankAccount.Balance + depositAmount - 4200M;
                         if (!bankAccount.AddMoney(depositAmount))
                         {
@@ -99,19 +99,35 @@ namespace Capstone.Classes
                         Console.Write("Please input your desired quantity: ");
                         int userInputQuantity = int.Parse(Console.ReadLine());
 
+
+                        decimal currentBalance = bankAccount.Balance;
                         string[] orderProducts = new string[2];
-                        orderProducts = catering.SelectProducts(userInputID, userInputQuantity);
+                        orderProducts = catering.SelectProducts(userInputID, userInputQuantity, currentBalance);
+
+                        if (orderProducts[0] == "Order added")
+                        {
+                            bankAccount.SubtractFromBalance(Convert.ToDecimal(orderProducts[1]));
+                        }
 
                         Console.WriteLine(orderProducts[0]);
-                        if (bankAccount.Balance - decimal.Parse(orderProducts[1]))
-                        {
 
-                        }
-                        bankAccount.SubtractFromBalance(decimal.Parse(orderProducts[1]));
                         break;
 
                     case "3":
                         //Closing actions
+
+                        bankAccount.SetBalanceToZero();
+
+                        foreach (string orderedItem in catering.orderList)
+                        {
+                            string[] itemArray = orderedItem.Split("|");
+
+                            Console.WriteLine($"{itemArray[1]}  {itemArray[2]}    {itemArray[3]}    {itemArray[4]}    {decimal.Parse(itemArray[4])*decimal.Parse(itemArray[1])}");
+
+                        }
+
+                        //Display change
+
 
                         done = true;
                         break;

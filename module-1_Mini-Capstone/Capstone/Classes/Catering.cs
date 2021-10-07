@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Capstone.Classes
@@ -14,33 +15,34 @@ namespace Capstone.Classes
         public List<string> orderList = new List<string>();
 
         public List<CateringItem> Inventory { get; }
-        public string[] SelectProducts(string userInputID, int userInputQuantity)
+        public string[] SelectProducts(string userInputID, int userInputQuantity, decimal customerBalance)
         {
             foreach (CateringItem product in items)
             {
 
-                if (product.ProductCode.ToUpper().Contains(userInputID))
+                if (product.ProductCode.ToUpper() == userInputID.ToUpper())
                 {
-                    
+
                     if (product.Quantity == 0)
                     {
-                        return new string[] { "Out of stock", "0"};
+                        return new string[] { "Out of stock", "0" };
                     }
                     else if (userInputQuantity > product.Quantity)
                     {
                         return new string[] { "Order quantity exceeds in-stock quantity", "0" };
                     }
+                    else if (customerBalance >= product.Price * userInputQuantity)
+                    {
+                        product.Quantity -= userInputQuantity;
 
-                    product.Quantity -= userInputQuantity;
-                    
-                    orderList.Add($"{userInputID}|{userInputQuantity}");
-                    return new string[] { "Order added", $"{userInputQuantity} * {product.Price}" };
-                        
+                        orderList.Add($"{userInputID}|{userInputQuantity}|{product.ProductCodeName}|{product.Name}|{product.Price}");
+                        return new string[] { "Order added", $"{userInputQuantity * product.Price}" };
+                    }
+
                 }
+                    return new string[] { "No matching product ID found", "0" };
             }
-                return new string[] { "No matching product ID found", "0" };
+            return new string[] { "", "" };
         }
-
     }
-
 }
