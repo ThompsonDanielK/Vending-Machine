@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.IO;
 
 namespace Capstone.Classes
 {
@@ -11,6 +12,29 @@ namespace Capstone.Classes
     {
         // All external data files for this application should live in this directory.
         // You will likely need to create this directory and copy / paste any needed files.
-        private string filePath = @"C:\Catering";
+        //string filePath = @"C:\Catering\cateringsystem.csv";
+        private string filePath = @"C:\Catering\";
+
+        
+        public void ReadInventoryFile()
+        {
+
+            using (StreamReader reader = new StreamReader(Path.Combine(filePath,"cateringsystem.csv"))
+            {
+                while (!reader.EndOfStream)
+                {
+                    string line = reader.ReadLine();
+
+                    string[] inventoryLine = line.Split("|");
+
+                    //ItemType | ProductCode | Name | Price
+                    //Add to items List
+
+                    List<CateringItem> item = new List<CateringItem>();
+                    item.Add(inventoryLine[0], inventoryLine[1], inventoryLine[2], inventoryLine[3]);
+                }
+            }
+
+        }
     }
 }

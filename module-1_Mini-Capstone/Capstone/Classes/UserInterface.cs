@@ -14,14 +14,27 @@ namespace Capstone.Classes
 
         public void RunMainMenu()
         {
+            //Run input file method to create inventory
+
+
             bool done = false;
 
             while (!done)
             {
-                Console.WriteLine("Put details of your user interface here");
+                Console.WriteLine("​(1) Display Catering Items");
+                Console.WriteLine("​(2) Order");
+                Console.WriteLine(​"(3) Quit");
 
                 Console.ReadLine();
             }
+        }
+            public void PurchaseMenu()
+        {
+            Console.WriteLine("(1) Add Money");
+            Console.WriteLine("(2) Select Products");
+            Console.WriteLine("(3) Complete Transaction");
+            Console.WriteLine($"Current Account Balance: "); //Add in proper balance
+
         }
     }
 }
