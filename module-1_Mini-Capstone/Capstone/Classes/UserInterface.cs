@@ -10,29 +10,26 @@ namespace Capstone.Classes
     /// </summary>
     public class UserInterface
     {
-
+        //Instantiate objects for Catering, BankAccount, and FileAccess classes
         Catering catering = new Catering();
         BankAccount bankAccount = new BankAccount();
         FileAccess fileAccess = new FileAccess();
         public void RunMainMenu()
         {
-            //Run input file method to create inventory
+            //Run input file method to create inventory list in Catering
             fileAccess.ReadInventoryFile(catering);
-
-
-
-
+            
+            //Display Main Menu, ask for user input, loop through until Quit selected
             bool done = false;
-
             while (!done)
             {
 
                 Console.WriteLine("(1) Display Catering Items");
                 Console.WriteLine("(2) Order");
                 Console.WriteLine("(3) Quit");
-
-                string userInput = Console.ReadLine();
                 Console.WriteLine();
+                Console.Write("Please enter a selection: ");
+                string userInput = Console.ReadLine();
                 Console.Clear();
 
                 switch (userInput)
@@ -58,6 +55,7 @@ namespace Capstone.Classes
         }
         public void PurchaseMenu()
         {
+            //Display Order Menu, get user input, loop through until Complete Transaction selected
             bool done = false;
 
             while (!done)
@@ -68,24 +66,35 @@ namespace Capstone.Classes
                 Console.WriteLine("(2) Select Products");
                 Console.WriteLine("(3) Complete Transaction");
                 Console.WriteLine($"Current Account Balance: {runningBalance.ToString("C")}");
-
+                Console.WriteLine();
+                Console.Write("Please enter a selection: ");
                 string userInput = Console.ReadLine();
 
                 switch (userInput)
                 {
                     case "1":
                         //Banking app
-                        Console.Write("How much money would you like to deposit: ");
-                        decimal depositAmount = decimal.Parse(Console.ReadLine()); ;
-                        decimal overageAmount = bankAccount.Balance + depositAmount - 4200M;
-                        if (!bankAccount.AddMoney(depositAmount))
+                        try
                         {
-                            Console.WriteLine($"You can only have a maximum of $4,200");
-                            Console.WriteLine($"Only {(depositAmount - overageAmount).ToString("C")} was deposited to your account.");
+
+                            Console.Write("How much money would you like to deposit: ");
+                            decimal depositAmount = decimal.Parse(Console.ReadLine()); ;
+                            decimal overageAmount = bankAccount.Balance + depositAmount - 4200M;
+                            if (!bankAccount.AddMoney(depositAmount))
+                            {
+                                Console.WriteLine($"You can only have a maximum of $4,200");
+                                Console.WriteLine($"Only {(depositAmount - overageAmount).ToString("C")} was deposited to your account.");
+                            }
+                            else
+                            {
+                                Console.WriteLine($"{depositAmount.ToString("C")} has been deposited to your account.");
+                            }
+                            Console.WriteLine();
                         }
-                        else
+                        catch (FormatException exc)
                         {
-                            Console.WriteLine($"{depositAmount.ToString("C")} has been deposited to your account.");
+                            Console.WriteLine("Please enter a valid deposit amount.");
+                            Console.WriteLine();
                         }
                         break;
 
@@ -110,7 +119,7 @@ namespace Capstone.Classes
                         }
 
                         Console.WriteLine(orderProducts[0]);
-
+                        Console.WriteLine();
                         break;
 
                     case "3":
@@ -122,13 +131,16 @@ namespace Capstone.Classes
                         {
                             string[] itemArray = orderedItem.Split("|");
 
-                            Console.WriteLine($"{itemArray[1]}  {itemArray[2]}    {itemArray[3]}    {itemArray[4]}    {decimal.Parse(itemArray[4])*decimal.Parse(itemArray[1])}");
+                            Console.WriteLine(String.Format("{0,-2} {1,-12} {2,-10} {3,-4} {4,10}", itemArray[1], itemArray[2], itemArray[3], decimal.Parse(itemArray[4]).ToString("C"),(decimal.Parse(itemArray[4]) * decimal.Parse(itemArray[1])).ToString("C")));
 
                         }
 
                         //Display change
-
-
+                        Console.WriteLine();
+                        Console.WriteLine("Change owed");
+                        Console.WriteLine(bankAccount.MakeChange(runningBalance));
+                        Console.WriteLine("Press any key to continue...");
+                        Console.ReadLine();
                         done = true;
                         break;
 

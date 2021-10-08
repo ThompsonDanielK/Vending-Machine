@@ -18,7 +18,9 @@ namespace Capstone.Classes
       
         public void ReadInventoryFile(Catering catering)
         {
-        List<CateringItem> inventoryList = new List<CateringItem>();
+        List<CateringItem> inventoryList = new List<CateringItem>(); //Do we even need this?**
+            try
+            {
 
             using (StreamReader reader = new StreamReader(Path.Combine(filePath, "cateringsystem.csv")))
             {
@@ -35,8 +37,12 @@ namespace Capstone.Classes
                 }
             }
             
+            }
+            catch (IOException exc)
+            {
+                Console.WriteLine("There was an error loading the inventory file.");
+            }
         }
-
     }
 }
 

@@ -108,7 +108,7 @@ namespace CapstoneTests
         }
 
         [TestMethod]
-        [DataRow("B1", 2, 1000, new string[] { "Order quantity exceeds in-stock quantity", "0" })]
+        [DataRow("B2", 2, 1000, new string[] { "Order quantity exceeds in-stock quantity", "0" })]
         public void SelectProducts_ReturnsOrderQuantityExceedsInStockQuantityStringArray(string userInputID, int userInputQuantity, double customerBalance, string[] expected)
         {
             // Arrange 
