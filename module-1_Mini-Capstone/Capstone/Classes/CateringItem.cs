@@ -50,7 +50,7 @@ namespace Capstone.Classes
         {
             if (Quantity < 1)
             {
-                return $"{ProductCode} {ProductCodeName} {Name} {Price} SOLD OUT";
+                return String.Format("{0,-4}{1,-12}{2,-20}{3,8}{4,4}", ProductCode, ProductCodeName, Name, Price.ToString("C"),"SOLD OUT");
             }
             return String.Format("{0,-4}{1,-12}{2,-20}{3,8}{4,4}",ProductCode,ProductCodeName,Name,Price.ToString("C"),Quantity);
         }

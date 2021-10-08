@@ -38,11 +38,9 @@ namespace Capstone.Classes
                         orderList.Add($"{userInputID}|{userInputQuantity}|{product.ProductCodeName}|{product.Name}|{product.Price}");
                         return new string[] { "Order added", $"{userInputQuantity * product.Price}" };
                     }
-
                 }
-                    return new string[] { "No matching product ID found", "0" };
             }
-            return new string[] { "", "" };
+            return new string[] { "No matching product ID found", "0" };
         }
     }
 }
