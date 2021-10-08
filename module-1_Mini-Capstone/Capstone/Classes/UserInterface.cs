@@ -132,36 +132,45 @@ namespace Capstone.Classes
 
                     //Catering app
                     case "2":
-                        Console.Write("Please input a product ID: ");
-                        string userInputID = Console.ReadLine().ToUpper();
-
-                        Console.WriteLine();
-
-                        Console.Write("Please input your desired quantity: ");
-                        int userInputQuantity = int.Parse(Console.ReadLine());
-                        Console.WriteLine();
-
-                        // Ensures user cannot input an order for 0 or less
-                        if (userInputQuantity > 0)
+                        try
                         {
-                            decimal currentBalance = bankAccount.Balance;
-                            string[] orderProducts = new string[3];
-                            orderProducts = catering.SelectProducts(userInputID, userInputQuantity, currentBalance);
+                            Console.Write("Please input a product ID: ");
+                            string userInputID = Console.ReadLine().ToUpper();
 
-                            if (orderProducts[0] == "Order added")
-                            {
-                                bankAccount.SubtractFromBalance(Convert.ToDecimal(orderProducts[1]));
-
-                                // Line to be written to log
-                                writeList.Add($"{DateTime.Now} {userInputQuantity} {orderProducts[2]} {userInputID} {Convert.ToDecimal(orderProducts[1]).ToString("C")} {bankAccount.Balance.ToString("C")}");
-                            }
-
-                            Console.WriteLine(orderProducts[0]);
                             Console.WriteLine();
+
+                            Console.Write("Please input your desired quantity: ");
+
+                            int userInputQuantity = int.Parse(Console.ReadLine());
+                            Console.WriteLine();
+
+                            // Ensures user cannot input an order for 0 or less
+                            if (userInputQuantity > 0)
+                            {
+                                decimal currentBalance = bankAccount.Balance;
+                                string[] orderProducts = new string[3];
+                                orderProducts = catering.SelectProducts(userInputID, userInputQuantity, currentBalance);
+
+                                if (orderProducts[0] == "Order added")
+                                {
+                                    bankAccount.SubtractFromBalance(Convert.ToDecimal(orderProducts[1]));
+
+                                    // Line to be written to log
+                                    writeList.Add($"{DateTime.Now} {userInputQuantity} {orderProducts[2]} {userInputID} {Convert.ToDecimal(orderProducts[1]).ToString("C")} {bankAccount.Balance.ToString("C")}");
+                                }
+
+                                Console.WriteLine(orderProducts[0]);
+                                Console.WriteLine();
+                            }
+                            else
+                            {
+                                Console.WriteLine("Desired quantity must be greater than 0");
+                            }
                         }
-                        else
+                        catch (FormatException exc)
                         {
-                            Console.WriteLine("Desired quantity must be greater than 0");
+                            Console.WriteLine("Please enter a valid quantity.");
+                            Console.WriteLine();
                         }
                         break;
 
