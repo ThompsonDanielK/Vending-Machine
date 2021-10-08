@@ -20,7 +20,7 @@ namespace Capstone.Classes
             foreach (CateringItem product in items)
             {
 
-                if (product.ProductCode.ToUpper() == userInputID.ToUpper())
+                if (product.ProductCode.ToUpper() == userInputID)
                 {
 
                     if (product.Quantity == 0)
@@ -36,13 +36,12 @@ namespace Capstone.Classes
                         product.Quantity -= userInputQuantity;
 
                         orderList.Add($"{userInputID}|{userInputQuantity}|{product.ProductCodeName}|{product.Name}|{product.Price}");
-                        return new string[] { "Order added", $"{userInputQuantity * product.Price}" };
+                        return new string[] { "Order added", $"{userInputQuantity * product.Price}", $"{product.Name}"};
                     }
 
                 }
-                    return new string[] { "No matching product ID found", "0" };
             }
-            return new string[] { "", "" };
+            return new string[] { "No matching product ID found", "0" };
         }
     }
 }
