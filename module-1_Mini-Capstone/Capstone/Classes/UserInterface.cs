@@ -73,6 +73,7 @@ namespace Capstone.Classes
                 Console.WriteLine();
                 Console.Write("Please enter a selection: ");
                 string userInput = Console.ReadLine();
+                Console.WriteLine();
 
                 switch (userInput)
                 {
@@ -98,7 +99,7 @@ namespace Capstone.Classes
                                 {
                                     // Line to be written to log
                                     writeList.Add($"{DateTime.Now} ADD MONEY: {depositAmount.ToString("C")} {bankAccount.Balance.ToString("C")}");
-
+                                    Console.WriteLine();
                                     Console.WriteLine($"{depositAmount.ToString("C")} has been deposited to your account.");
                                 }
                             Console.WriteLine();
@@ -124,6 +125,7 @@ namespace Capstone.Classes
 
                         Console.Write("Please input your desired quantity: ");
                         int userInputQuantity = int.Parse(Console.ReadLine());
+                        Console.WriteLine();
 
                         if (userInputQuantity > 0)
                         {
