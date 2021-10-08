@@ -169,7 +169,7 @@ namespace Capstone.Classes
                         }
                         catch (FormatException exc)
                         {
-                            Console.WriteLine("Please enter a valid quantity.");
+                            Console.WriteLine("Please enter a valid product ID and quantity.");
                             Console.WriteLine();
                         }
                         break;
