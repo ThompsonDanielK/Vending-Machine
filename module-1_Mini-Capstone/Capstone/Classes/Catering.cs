@@ -38,6 +38,10 @@ namespace Capstone.Classes
                         orderList.Add($"{userInputID}|{userInputQuantity}|{product.ProductCodeName}|{product.Name}|{product.Price}");
                         return new string[] { "Order added", $"{userInputQuantity * product.Price}", $"{product.Name}"};
                     }
+                    else if (customerBalance < product.Price * userInputQuantity)
+                    {
+                        return new string[] { "Your account balance is too low to select these products" };
+                    }
 
                 }
             }
