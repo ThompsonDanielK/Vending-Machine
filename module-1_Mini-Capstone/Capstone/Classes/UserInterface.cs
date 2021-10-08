@@ -160,19 +160,14 @@ namespace Capstone.Classes
                         fileAccess.WriteInventoryFile(writeList);
 
                         bankAccount.SetBalanceToZero();
-                        decimal total = 0M;
 
                         foreach (string orderedItem in catering.orderList)
                         {
-                            string[] itemArray = orderedItem.Split("|");
-                            total += Convert.ToDecimal(itemArray[4]);
-
-                            Console.WriteLine(String.Format("{0,-2} {1,-12} {2,-10} {3,-4} {4,10}", itemArray[1], itemArray[2], itemArray[3], decimal.Parse(itemArray[4]).ToString("C"),(decimal.Parse(itemArray[4]) * decimal.Parse(itemArray[1])).ToString("C")));
-
-                        }
-
+                        Console.WriteLine(catering.OrderReport(orderedItem));                            
+                        }                       
                         Console.WriteLine();
-                        Console.WriteLine($"Total: {total.ToString("C")}");
+                        Console.WriteLine(catering.OrderTotal());
+                        Console.WriteLine();
 
                         //Display change
                         Console.WriteLine();

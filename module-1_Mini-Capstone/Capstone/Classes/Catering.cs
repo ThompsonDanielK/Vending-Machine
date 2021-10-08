@@ -36,15 +36,33 @@ namespace Capstone.Classes
                         product.Quantity -= userInputQuantity;
 
                         orderList.Add($"{userInputID}|{userInputQuantity}|{product.ProductCodeName}|{product.Name}|{product.Price}");
-                        return new string[] { "Order added", $"{userInputQuantity * product.Price}", $"{product.Name}"};
+                        return new string[] { "Order added", $"{userInputQuantity * product.Price}", $"{product.Name}" };
                     }
                     else if (customerBalance < product.Price * userInputQuantity)
                     {
-                        return new string[] { "Your account balance is too low to select these products" , "0"};
+                        return new string[] { "Your account balance is too low to select these products", "0" };
                     }
                 }
             }
             return new string[] { "No matching product ID found", "0" };
+        }
+
+        public string OrderReport(string orderedItem)
+        {
+            string[] itemArray = orderedItem.Split("|");
+            return String.Format("{0,-2} {1,-12} {2,-10} {3,-4} {4,10}", itemArray[1], itemArray[2], itemArray[3], decimal.Parse(itemArray[4]).ToString("C"), (decimal.Parse(itemArray[4]) * decimal.Parse(itemArray[1])).ToString("C"));
+        }
+
+        public string OrderTotal()
+        {
+            decimal total = 0M;
+            foreach (string orderedItem in orderList)
+            {
+                string[] itemArray = orderedItem.Split("|");
+                total += Convert.ToInt32(itemArray[1]) * Convert.ToDecimal(itemArray[4]);
+
+            }
+            return $"Total: {total.ToString("C")}";
         }
     }
 }
