@@ -83,22 +83,29 @@ namespace Capstone.Classes
                             Console.Write("How much money would you like to deposit: ");
                             decimal depositAmount = decimal.Parse(Console.ReadLine()); ;
                             decimal overageAmount = bankAccount.Balance + depositAmount - 4200M;
-                            if (!bankAccount.AddMoney(depositAmount))
+                            if (depositAmount >= 0)
                             {
-                                // Line to be written to log
-                                writeList.Add($"{DateTime.Now} ADD MONEY: {(depositAmount - overageAmount).ToString("C")} {bankAccount.Balance.ToString("C")}");
+                                if (!bankAccount.AddMoney(depositAmount))
+                                {
+                                    // Line to be written to log
+                                    writeList.Add($"{DateTime.Now} ADD MONEY: {(depositAmount - overageAmount).ToString("C")} {bankAccount.Balance.ToString("C")}");
 
-                                Console.WriteLine($"You can only have a maximum of $4,200.00");
-                                Console.WriteLine($"Only {(depositAmount - overageAmount).ToString("C")} was deposited to your account.");
+                                    Console.WriteLine($"You can only have a maximum of $4,200.00");
+                                    Console.WriteLine($"Only {(depositAmount - overageAmount).ToString("C")} was deposited to your account.");
+                                }
+                                else
+                                {
+                                    // Line to be written to log
+                                    writeList.Add($"{DateTime.Now} ADD MONEY: {depositAmount.ToString("C")} {bankAccount.Balance.ToString("C")}");
+
+                                    Console.WriteLine($"{depositAmount.ToString("C")} has been deposited to your account.");
+                                }
+                            Console.WriteLine();
                             }
                             else
                             {
-                                // Line to be written to log
-                                writeList.Add($"{DateTime.Now} ADD MONEY: {depositAmount.ToString("C")} {bankAccount.Balance.ToString("C")}");
-
-                                Console.WriteLine($"{depositAmount.ToString("C")} has been deposited to your account.");
+                                Console.WriteLine("Please enter a positive value");
                             }
-                            Console.WriteLine();
                         }
                         catch (FormatException exc)
                         {
