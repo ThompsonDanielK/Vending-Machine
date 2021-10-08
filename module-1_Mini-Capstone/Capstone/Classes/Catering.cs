@@ -40,7 +40,7 @@ namespace Capstone.Classes
                     }
                     else if (customerBalance < product.Price * userInputQuantity)
                     {
-                        return new string[] { "Your account balance is too low to select these products" };
+                        return new string[] { "Your account balance is too low to select these products" , "0"};
                     }
                 }
             }

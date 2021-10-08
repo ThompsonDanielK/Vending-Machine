@@ -7,95 +7,13 @@ namespace CapstoneTests
     [TestClass]
     public class CateringTest
     {
-        [TestMethod]
-        [DataRow(3000, 3000)]
-        [DataRow(1234, 1234)]
-        [DataRow(0, 0)]
-
-        public void AddMoney_AddsCorrectAmountToBalance(double deposit, double expected)
-        {
-            // Arrange 
-            BankAccount ops = new BankAccount();
-
-            // Act
-            ops.AddMoney(Convert.ToDecimal(deposit));
-
-            // Assert
-            Assert.AreEqual(Convert.ToDecimal(expected), ops.Balance);
-        }
 
         [TestMethod]
-        [DataRow(1000, 2000)]
-        [DataRow(1234, 2234)]
-        [DataRow(0, 1000)]
-        [DataRow(4000, 4200)]
-
-        public void AddMoneyToExistingBalance(double deposit, double expected)
-        {
-            // Arrange 
-            BankAccount ops = new BankAccount();
-            ops.AddMoney(1000);
-
-            // Act
-            ops.AddMoney(Convert.ToDecimal(deposit));
-
-            // Assert
-            Assert.AreEqual(Convert.ToDecimal(expected), ops.Balance);
-        }
-
-        [TestMethod]
-        [DataRow(5000, 4200)]
-        [DataRow(4201, 4200)]
-        public void AddMoney_DoesNotAddMoreThan4200 (double deposit, double expected)
-        {
-            // Arrange 
-            BankAccount ops = new BankAccount();
-
-            // Act
-            ops.AddMoney(Convert.ToDecimal(deposit));
-
-            // Assert
-            Assert.AreEqual(Convert.ToDecimal(expected), ops.Balance);
-        }
-
-        [TestMethod]
-        [DataRow(3000)]
-        [DataRow(1)]
-        [DataRow(0)]
-
-        public void AddMoney_ReturnsTrueIfBalanceDoesNotExceed4200(double deposit)
-        {
-            // Arrange 
-            BankAccount ops = new BankAccount();
-
-            // Act
-            bool result = ops.AddMoney(Convert.ToDecimal(deposit));
-
-            // Assert
-            Assert.IsTrue(result);
-        }
-
-        [TestMethod]
-        [DataRow(5000)]
-        [DataRow(4201)]
-        public void AddMoney_ReturnsFalseIfBalanceExceeds4200(double deposit)
-        {
-            // Arrange 
-            BankAccount ops = new BankAccount();
-
-            // Act
-            bool result = ops.AddMoney(Convert.ToDecimal(deposit));
-
-            // Assert
-            Assert.IsFalse(result);
-        }
-
-        [TestMethod]
-        [DataRow("B1", 2, 1000, new string[] { "Order added", "3.00" })]
-        [DataRow("A1", 2, 1000, new string[] { "Order added", "7.00" })]
-        [DataRow("A3", 3, 1000, new string[] { "Order added", "12.45" })]
-        [DataRow("E4", 20, 1000, new string[] { "Order added", "103.00" })]
-        [DataRow("D2", 10, 1000, new string[] { "Order added", "18.00" })]
+        [DataRow("B1", 2, 1000, new string[] { "Order added", "3.00" , "Soda"})]
+        [DataRow("A1", 2, 1000, new string[] { "Order added", "7.00", "Pretzels and Mustard" })]
+        [DataRow("A3", 3, 1000, new string[] { "Order added", "12.45", "Bacon Wrapped Shrimp"})]
+        [DataRow("E4", 20, 1000, new string[] { "Order added", "103.00", "Glass Shards Pizza"})]
+        [DataRow("D2", 10, 1000, new string[] { "Order added", "18.00", "Cake"})]
 
 
         public void SelectProducts_ReturnsCorrectArrayOfStrings(string userInputID, int userInputQuantity, double customerBalance, string[] expected)
@@ -168,8 +86,8 @@ namespace CapstoneTests
         }
 
         [TestMethod]
-        [DataRow("B4", 3, 0, new string[] { "Not enough money in account to purchase.", "0" })]
-        [DataRow("E3", 1, 0, new string[] { "Not enough money in account to purchase.", "0" })]
+        [DataRow("B4", 3, 0, new string[] { "Your account balance is too low to select these products", "0" })]
+        [DataRow("E3", 1, 0, new string[] { "Your account balance is too low to select these products", "0" })]
         public void SelectProductsDoesNotAllowPurchaseGreaterThanBalance(string userInputID, int userInputQuantity, double customerBalance, string[] expected)
         {
             // Arrange 
