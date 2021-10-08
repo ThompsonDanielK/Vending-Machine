@@ -91,7 +91,7 @@ namespace Capstone.Classes
                         try
                         {
 
-                            Console.Write("How much money would you like to deposit: ");
+                            Console.Write("How much money would you like to deposit?: ");
                             decimal depositAmount = decimal.Parse(Console.ReadLine()); ;
                             decimal overageAmount = bankAccount.Balance + depositAmount - 4200M;
 
@@ -104,7 +104,7 @@ namespace Capstone.Classes
                                     // Line to be written to log
                                     writeList.Add($"{DateTime.Now} ADD MONEY: {(depositAmount - overageAmount).ToString("C")} {bankAccount.Balance.ToString("C")}");
 
-                                    Console.WriteLine($"You can only have a maximum of $4,200.00");
+                                    Console.WriteLine($"You can only have a maximum of $4,200.00.");
                                     Console.WriteLine($"Only {(depositAmount - overageAmount).ToString("C")} was deposited to your account.");
                                 }
 
@@ -120,7 +120,7 @@ namespace Capstone.Classes
                             }
                             else
                             {
-                                Console.WriteLine("Please enter a positive value");
+                                Console.WriteLine("Please enter a positive value.");
                             }
                         }
                         catch (FormatException exc)
@@ -164,7 +164,7 @@ namespace Capstone.Classes
                             }
                             else
                             {
-                                Console.WriteLine("Desired quantity must be greater than 0");
+                                Console.WriteLine("Desired quantity must be greater than 0.");
                             }
                         }
                         catch (FormatException exc)
