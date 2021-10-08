@@ -106,5 +106,29 @@ namespace CapstoneTests
             // Assert
             CollectionAssert.AreEqual(expected, result);
         }
+
+        [TestMethod]
+        [DataRow("B1", 2, 1000, new string[] { "Order quantity exceeds in-stock quantity", "0" })]
+        public void SelectProducts_ReturnsOrderQuantityExceedsInStockQuantityStringArray(string userInputID, int userInputQuantity, double customerBalance, string[] expected)
+        {
+            // Arrange 
+            Catering ops = new Catering();
+            FileAccess fileAccess = new FileAccess();
+            string[] result = new string[2];
+            // Act
+            fileAccess.ReadInventoryFile(ops);
+
+            foreach (CateringItem product in ops.items)
+            {
+                if (product.ProductCode == userInputID)
+                {
+                    product.Quantity = 1;
+                }
+            }
+            result = ops.SelectProducts(userInputID, userInputQuantity, Convert.ToDecimal(customerBalance));
+
+            // Assert
+            CollectionAssert.AreEqual(expected, result);
+        }
     }
 }
