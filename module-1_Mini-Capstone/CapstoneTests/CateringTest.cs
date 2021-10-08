@@ -66,5 +66,45 @@ namespace CapstoneTests
             // Assert
             Assert.IsFalse(result);
         }
+
+        [TestMethod]
+        [DataRow("B1", 2, 1000, new string[] { "Order added", "3.00" })]        
+        public void SelectProducts_ReturnsCorrectArrayOfStrings(string userInputID, int userInputQuantity, double customerBalance, string[] expected)
+        {
+            // Arrange 
+            Catering ops = new Catering();
+            FileAccess fileAccess = new FileAccess();
+            string[] result = new string[2];
+            // Act
+            fileAccess.ReadInventoryFile(ops);
+            result = ops.SelectProducts(userInputID, userInputQuantity, Convert.ToDecimal(customerBalance));
+
+            // Assert
+            CollectionAssert.AreEqual(expected, result);
+        }
+
+        [TestMethod]
+        [DataRow("B1", 2, 1000, new string[] { "Out of stock", "0" })]
+        public void SelectProducts_ReturnsOutOfStockStringArray(string userInputID, int userInputQuantity, double customerBalance, string[] expected)
+        {
+            // Arrange 
+            Catering ops = new Catering();
+            FileAccess fileAccess = new FileAccess();
+            string[] result = new string[2];
+            // Act
+            fileAccess.ReadInventoryFile(ops);
+            
+            foreach (CateringItem product in ops.items)
+            {
+                if (product.ProductCode == userInputID)
+                {
+                    product.Quantity = 0;
+                }
+            }
+            result = ops.SelectProducts(userInputID, userInputQuantity, Convert.ToDecimal(customerBalance));
+
+            // Assert
+            CollectionAssert.AreEqual(expected, result);
+        }
     }
 }
