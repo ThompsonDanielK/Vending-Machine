@@ -30,7 +30,8 @@ namespace Capstone.Classes
                 Console.WriteLine();
                 Console.Write("Please enter a selection: ");
                 string userInput = Console.ReadLine();
-                Console.Clear();
+                Console.WriteLine();
+                //Console.Clear();
 
                 switch (userInput)
                 {
@@ -132,10 +133,10 @@ namespace Capstone.Classes
 
                             if (orderProducts[0] == "Order added")
                             {
+                                bankAccount.SubtractFromBalance(Convert.ToDecimal(orderProducts[1]));
+
                                 // Line to be written to log
                                 writeList.Add($"{DateTime.Now} {userInputQuantity} {orderProducts[2]} {userInputID} {Convert.ToDecimal(orderProducts[1]).ToString("C")} {bankAccount.Balance.ToString("C")}");
-
-                                bankAccount.SubtractFromBalance(Convert.ToDecimal(orderProducts[1]));
                             }
 
                             Console.WriteLine(orderProducts[0]);
@@ -170,7 +171,7 @@ namespace Capstone.Classes
                         Console.WriteLine();
                         Console.WriteLine("Change owed");
                         Console.WriteLine(bankAccount.MakeChange(runningBalance));
-                        Console.WriteLine("Press any key to continue...");
+                        Console.WriteLine("Press enter key to continue...");
                         Console.ReadLine();
                         done = true;
                         break;
