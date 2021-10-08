@@ -58,6 +58,9 @@ namespace Capstone.Classes
             //Display Order Menu, get user input, loop through until Complete Transaction selected
             bool done = false;
 
+            //List pending to be written to log file
+            List<string> writeList = new List<string>();
+
             while (!done)
             {
                 decimal runningBalance = bankAccount.Balance;
@@ -80,16 +83,29 @@ namespace Capstone.Classes
                             Console.Write("How much money would you like to deposit: ");
                             decimal depositAmount = decimal.Parse(Console.ReadLine()); ;
                             decimal overageAmount = bankAccount.Balance + depositAmount - 4200M;
-                            if (!bankAccount.AddMoney(depositAmount))
+                            if (depositAmount >= 0)
                             {
-                                Console.WriteLine($"You can only have a maximum of $4,200");
-                                Console.WriteLine($"Only {(depositAmount - overageAmount).ToString("C")} was deposited to your account.");
+                                if (!bankAccount.AddMoney(depositAmount))
+                                {
+                                    // Line to be written to log
+                                    writeList.Add($"{DateTime.Now} ADD MONEY: {(depositAmount - overageAmount).ToString("C")} {bankAccount.Balance.ToString("C")}");
+
+                                    Console.WriteLine($"You can only have a maximum of $4,200.00");
+                                    Console.WriteLine($"Only {(depositAmount - overageAmount).ToString("C")} was deposited to your account.");
+                                }
+                                else
+                                {
+                                    // Line to be written to log
+                                    writeList.Add($"{DateTime.Now} ADD MONEY: {depositAmount.ToString("C")} {bankAccount.Balance.ToString("C")}");
+
+                                    Console.WriteLine($"{depositAmount.ToString("C")} has been deposited to your account.");
+                                }
+                            Console.WriteLine();
                             }
                             else
                             {
-                                Console.WriteLine($"{depositAmount.ToString("C")} has been deposited to your account.");
+                                Console.WriteLine("Please enter a positive value");
                             }
-                            Console.WriteLine();
                         }
                         catch (FormatException exc)
                         {
@@ -108,22 +124,37 @@ namespace Capstone.Classes
                         Console.Write("Please input your desired quantity: ");
                         int userInputQuantity = int.Parse(Console.ReadLine());
 
-
-                        decimal currentBalance = bankAccount.Balance;
-                        string[] orderProducts = new string[2];
-                        orderProducts = catering.SelectProducts(userInputID, userInputQuantity, currentBalance);
-
-                        if (orderProducts[0] == "Order added")
+                        if (userInputQuantity > 0)
                         {
-                            bankAccount.SubtractFromBalance(Convert.ToDecimal(orderProducts[1]));
-                        }
+                            decimal currentBalance = bankAccount.Balance;
+                            string[] orderProducts = new string[3];
+                            orderProducts = catering.SelectProducts(userInputID, userInputQuantity, currentBalance);
 
-                        Console.WriteLine(orderProducts[0]);
-                        Console.WriteLine();
+                            if (orderProducts[0] == "Order added")
+                            {
+                                // Line to be written to log
+                                writeList.Add($"{DateTime.Now} {userInputQuantity} {orderProducts[2]} {userInputID} {Convert.ToDecimal(orderProducts[1]).ToString("C")} {bankAccount.Balance.ToString("C")}");
+
+                                bankAccount.SubtractFromBalance(Convert.ToDecimal(orderProducts[1]));
+                            }
+
+                            Console.WriteLine(orderProducts[0]);
+                            Console.WriteLine();
+                        }
+                        else
+                        {
+                            Console.WriteLine("Desired quantity must be greater than 0");
+                        }
                         break;
 
                     case "3":
                         //Closing actions
+
+                        // Line to be written to log
+                        writeList.Add($"{DateTime.Now} GIVE CHANGE: {bankAccount.Balance.ToString("C")} $0.00");
+
+                        // Writing list to log
+                        fileAccess.WriteInventoryFile(writeList);
 
                         bankAccount.SetBalanceToZero();
 

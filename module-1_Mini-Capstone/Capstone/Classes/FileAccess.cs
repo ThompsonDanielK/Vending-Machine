@@ -43,6 +43,26 @@ namespace Capstone.Classes
                 Console.WriteLine("There was an error loading the inventory file.");
             }
         }
+
+        public void WriteInventoryFile(List<string> writeList)
+        {
+            try
+            {
+                using (StreamWriter writer = new StreamWriter(Path.Combine(filePath, "log.txt"), true))
+                {
+                    foreach (string line in writeList)
+                    {
+                        writer.WriteLine(line);
+                    }
+
+                }
+
+            }
+            catch (IOException exc)
+            {
+                Console.WriteLine("There was an error writing to the log file.");
+            }
+        }
     }
 }
 
