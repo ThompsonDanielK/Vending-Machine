@@ -124,21 +124,27 @@ namespace Capstone.Classes
                         Console.Write("Please input your desired quantity: ");
                         int userInputQuantity = int.Parse(Console.ReadLine());
 
-
-                        decimal currentBalance = bankAccount.Balance;
-                        string[] orderProducts = new string[3];
-                        orderProducts = catering.SelectProducts(userInputID, userInputQuantity, currentBalance);
-
-                        if (orderProducts[0] == "Order added")
+                        if (userInputQuantity > 0)
                         {
-                            // Line to be written to log
-                            writeList.Add($"{DateTime.Now} {userInputQuantity} {orderProducts[2]} {userInputID} {Convert.ToDecimal(orderProducts[1]).ToString("C")} {bankAccount.Balance.ToString("C")}");
+                            decimal currentBalance = bankAccount.Balance;
+                            string[] orderProducts = new string[3];
+                            orderProducts = catering.SelectProducts(userInputID, userInputQuantity, currentBalance);
 
-                            bankAccount.SubtractFromBalance(Convert.ToDecimal(orderProducts[1]));
+                            if (orderProducts[0] == "Order added")
+                            {
+                                // Line to be written to log
+                                writeList.Add($"{DateTime.Now} {userInputQuantity} {orderProducts[2]} {userInputID} {Convert.ToDecimal(orderProducts[1]).ToString("C")} {bankAccount.Balance.ToString("C")}");
+
+                                bankAccount.SubtractFromBalance(Convert.ToDecimal(orderProducts[1]));
+                            }
+
+                            Console.WriteLine(orderProducts[0]);
+                            Console.WriteLine();
                         }
-
-                        Console.WriteLine(orderProducts[0]);
-                        Console.WriteLine();
+                        else
+                        {
+                            Console.WriteLine("Desired quantity must be greater than 0");
+                        }
                         break;
 
                     case "3":
