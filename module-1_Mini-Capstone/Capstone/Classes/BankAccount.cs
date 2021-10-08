@@ -8,6 +8,11 @@ namespace Capstone.Classes
     {
         public decimal Balance { get; private set; } = 0M;
 
+        /// <summary>
+        /// Adds money to balance and returns false if balance would exceed $4200
+        /// </summary>
+        /// <param name="deposit"></param>
+        /// <returns>bool</returns>
         public bool AddMoney(decimal deposit)
         {
             if (Balance + deposit > 4200M)
@@ -19,16 +24,29 @@ namespace Capstone.Classes
             Balance += deposit;
             return true;
         }
+
+        /// <summary>
+        /// Sets balance to 0
+        /// </summary>
         public void SetBalanceToZero()
         {
             this.Balance = 0M;
         }
 
+        /// <summary>
+        /// Subtracts price from balance
+        /// </summary>
+        /// <param name="price"></param>
         public void SubtractFromBalance(decimal price)
         {
             Balance -= price;
         }
 
+        /// <summary>
+        /// Breaks users change into the smallest amount of bills and coins
+        /// </summary>
+        /// <param name="changeAmount"></param>
+        /// <returns>string</returns>
         public string MakeChange(decimal changeAmount)
         {
             decimal change = changeAmount;

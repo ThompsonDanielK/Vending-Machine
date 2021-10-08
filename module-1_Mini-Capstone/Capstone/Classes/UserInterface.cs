@@ -14,11 +14,15 @@ namespace Capstone.Classes
         Catering catering = new Catering();
         BankAccount bankAccount = new BankAccount();
         FileAccess fileAccess = new FileAccess();
+
+        /// <summary>
+        /// This method displays the main menu and reads user input
+        /// </summary>
         public void RunMainMenu()
         {
             //Run input file method to create inventory list in Catering
             fileAccess.ReadInventoryFile(catering);
-            
+
             //Display Main Menu, ask for user input, loop through until Quit selected
             bool done = false;
             while (!done)
@@ -31,10 +35,10 @@ namespace Capstone.Classes
                 Console.Write("Please enter a selection: ");
                 string userInput = Console.ReadLine();
                 Console.WriteLine();
-                //Console.Clear();
 
                 switch (userInput)
                 {
+                    // Loops through each instance of CateringItem and writes out properties of each
                     case "1":
                         foreach (CateringItem item in catering.items)
                         {
@@ -42,10 +46,12 @@ namespace Capstone.Classes
                         }
                         break;
 
+                    // Takes user to PurchaseMenu method
                     case "2":
                         PurchaseMenu();
                         break;
 
+                    // Ends while loop and ends application
                     case "3":
                         done = true;
                         break;
@@ -54,12 +60,15 @@ namespace Capstone.Classes
 
             }
         }
+        /// <summary>
+        /// This method displays a purchase menu and reads user input
+        /// </summary>
         public void PurchaseMenu()
         {
-            //Display Order Menu, get user input, loop through until Complete Transaction selected
+            // Display Order Menu, get user input, loop through until Complete Transaction selected
             bool done = false;
 
-            //List pending to be written to log file
+            // List pending to be written to log file
             List<string> writeList = new List<string>();
 
             while (!done)
@@ -77,16 +86,19 @@ namespace Capstone.Classes
 
                 switch (userInput)
                 {
+                    // Banking app
                     case "1":
-                        //Banking app
                         try
                         {
 
                             Console.Write("How much money would you like to deposit: ");
                             decimal depositAmount = decimal.Parse(Console.ReadLine()); ;
                             decimal overageAmount = bankAccount.Balance + depositAmount - 4200M;
+
+                            // User cannot input value less than 0
                             if (depositAmount >= 0)
                             {
+                                //  If AddMoney method returns false, the deposit is made but only up to $4200
                                 if (!bankAccount.AddMoney(depositAmount))
                                 {
                                     // Line to be written to log
@@ -95,6 +107,8 @@ namespace Capstone.Classes
                                     Console.WriteLine($"You can only have a maximum of $4,200.00");
                                     Console.WriteLine($"Only {(depositAmount - overageAmount).ToString("C")} was deposited to your account.");
                                 }
+
+                                // If AddMoney returns true, the deposit is made
                                 else
                                 {
                                     // Line to be written to log
@@ -102,7 +116,7 @@ namespace Capstone.Classes
                                     Console.WriteLine();
                                     Console.WriteLine($"{depositAmount.ToString("C")} has been deposited to your account.");
                                 }
-                            Console.WriteLine();
+                                Console.WriteLine();
                             }
                             else
                             {
@@ -116,8 +130,8 @@ namespace Capstone.Classes
                         }
                         break;
 
+                    //Catering app
                     case "2":
-                        //Catering app
                         Console.Write("Please input a product ID: ");
                         string userInputID = Console.ReadLine().ToUpper();
 
@@ -127,6 +141,7 @@ namespace Capstone.Classes
                         int userInputQuantity = int.Parse(Console.ReadLine());
                         Console.WriteLine();
 
+                        // Ensures user cannot input an order for 0 or less
                         if (userInputQuantity > 0)
                         {
                             decimal currentBalance = bankAccount.Balance;
@@ -151,7 +166,7 @@ namespace Capstone.Classes
                         break;
 
                     case "3":
-                        //Closing actions
+                        // Closing actions
 
                         // Line to be written to log
                         writeList.Add($"{DateTime.Now} GIVE CHANGE: {bankAccount.Balance.ToString("C")} $0.00");
@@ -161,15 +176,16 @@ namespace Capstone.Classes
 
                         bankAccount.SetBalanceToZero();
 
+                        // Displays purchases made before transaction was completed
                         foreach (string orderedItem in catering.orderList)
                         {
-                        Console.WriteLine(catering.OrderReport(orderedItem));                            
-                        }                       
+                            Console.WriteLine(catering.OrderReport(orderedItem));
+                        }
                         Console.WriteLine();
                         Console.WriteLine(catering.OrderTotal());
                         Console.WriteLine();
 
-                        //Display change
+                        // Display change
                         Console.WriteLine();
                         Console.WriteLine("Change owed");
                         Console.WriteLine(bankAccount.MakeChange(runningBalance));

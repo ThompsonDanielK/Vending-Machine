@@ -15,7 +15,10 @@ namespace Capstone.Classes
         //string filePath = @"C:\Catering\cateringsystem.csv";
         private string filePath = @"C:\Catering\";
 
-      
+      /// <summary>
+      /// Reads invetory from file and adds them to a list
+      /// </summary>
+      /// <param name="catering"></param>
         public void ReadInventoryFile(Catering catering)
         {
         List<CateringItem> inventoryList = new List<CateringItem>(); //Do we even need this?**
@@ -44,6 +47,10 @@ namespace Capstone.Classes
             }
         }
 
+        /// <summary>
+        /// Loops through list and writes each line to a file
+        /// </summary>
+        /// <param name="writeList"></param>
         public void WriteInventoryFile(List<string> writeList)
         {
             try

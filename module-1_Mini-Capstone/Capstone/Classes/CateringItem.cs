@@ -46,6 +46,10 @@ namespace Capstone.Classes
             this.Price = price;
         }
 
+        /// <summary>
+        /// Displays inventory
+        /// </summary>
+        /// <returns>string</returns>
         public string DisplayInfo()
         {
             if (Quantity < 1)
