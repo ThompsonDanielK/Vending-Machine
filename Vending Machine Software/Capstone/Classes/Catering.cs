@@ -24,8 +24,10 @@ namespace Capstone.Classes
         /// <param name="userInputQuantity"></param>
         /// <param name="customerBalance"></param>
         /// <returns>string[]</returns>
-        public string[] SelectProducts(string userInputID, int userInputQuantity, decimal customerBalance)
+        public CateringItem SelectProducts(string userInputID, int userInputQuantity, decimal customerBalance)
         {
+            CateringItem cateringItem = new CateringItem(null, null, null, 0M);
+
             // Looping through each instance of CateringItem to see if userInputID matches the product code property
             foreach (CateringItem product in items)
             {
@@ -35,13 +37,17 @@ namespace Capstone.Classes
 
                     if (product.Quantity == 0)
                     {
-                        return new string[] { "Out of stock", "0" };
+                        cateringItem.Quantity = 0;
+                        return cateringItem;
+                        //return new string[] { "Out of stock", "0" };
                     }
 
                     // If the user tries to order more than what's in stock
                     else if (userInputQuantity > product.Quantity)
                     {
-                        return new string[] { "Order quantity exceeds in-stock quantity", "0" };
+                        cateringItem.Quantity = -1;
+                        return cateringItem;
+                        //return new string[] { "Order quantity exceeds in-stock quantity", "0" };
                     }
 
                     // This checks if the user has enough money and if so, it processes the purchase
@@ -50,17 +56,25 @@ namespace Capstone.Classes
                         product.Quantity -= userInputQuantity;
 
                         orderList.Add($"{userInputID}|{userInputQuantity}|{product.ProductCodeName}|{product.Name}|{product.Price}");
-                        return new string[] { "Order added", $"{userInputQuantity * product.Price}", $"{product.Name}" };
+
+                        CateringItem success = new CateringItem(product.ItemType, product.ProductCode, product.Name, product.Price * userInputQuantity);
+                        success.Quantity = userInputQuantity;
+
+                        return success;
+                        
+                        //return new string[] { "Order added", $"{userInputQuantity * product.Price}", $"{product.Name}" };
                     }
 
                     // If the price of the desired quantity exceeds the users balance, it returns a message
                     else if (customerBalance < product.Price * userInputQuantity)
                     {
-                        return new string[] { "Your account balance is too low to select these products", "0" };
+                        cateringItem.Quantity = -2;
+                        //return new string[] { "Your account balance is too low to select these products", "0" };
                     }
                 }
             }
-            return new string[] { "No matching product ID found", "0" };
+            return cateringItem;
+            //return new string[] { "No matching product ID found", "0" };
         }
 
         /// <summary>

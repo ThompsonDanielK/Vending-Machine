@@ -158,18 +158,34 @@ namespace Capstone.Classes
                 if (userInputQuantity > 0)
                 {
                     decimal currentBalance = bankAccount.Balance;
-                    string[] orderProducts = new string[3];
-                    orderProducts = catering.SelectProducts(userInputID, userInputQuantity, currentBalance);
+                    CateringItem orderProducts = catering.SelectProducts(userInputID, userInputQuantity, currentBalance);
 
-                    if (orderProducts[0] == "Order added")
+                    if (orderProducts.Price > 0)
                     {
-                        bankAccount.SubtractFromBalance(Convert.ToDecimal(orderProducts[1]));
+                        bankAccount.SubtractFromBalance(Convert.ToDecimal(orderProducts.Price * orderProducts.Quantity));
 
                         // Line to be written to log
-                        writeList.Add($"{DateTime.Now} {userInputQuantity} {orderProducts[2]} {userInputID} {Convert.ToDecimal(orderProducts[1]).ToString("C")} {bankAccount.Balance.ToString("C")}");
+                        writeList.Add($"{DateTime.Now} {userInputQuantity} {orderProducts.Name} {orderProducts.ProductCode} {Convert.ToDecimal(orderProducts.Price * orderProducts.Quantity).ToString("C")} {bankAccount.Balance.ToString("C")}");
+                        Console.WriteLine("Order Added");
+                    }
+                    else if (orderProducts.Quantity == 0)
+                    {
+                        Console.WriteLine("Out of stock");
+                    }
+                    else if (orderProducts.Quantity == -1)
+                    {
+                        Console.WriteLine("Order quantity exceeds in-stock quantity");
+                    }
+                    else if (orderProducts.Quantity == -2)
+                    {
+                        Console.WriteLine("Your account balance is too low to select these products");
+                    }
+                    else if (orderProducts.Name == null)
+                    {
+                        Console.WriteLine("No matching product ID found");
                     }
 
-                    Console.WriteLine(orderProducts[0]);
+                    //Console.WriteLine(orderProducts[0]);
                     Console.WriteLine();
                 }
                 else
