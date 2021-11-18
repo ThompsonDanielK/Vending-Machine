@@ -88,124 +88,143 @@ namespace Capstone.Classes
                 {
                     // Banking app
                     case "1":
-                        try
-                        {
-
-                            Console.Write("How much money would you like to deposit?: ");
-                            decimal depositAmount = decimal.Parse(Console.ReadLine()); ;
-                            decimal overageAmount = bankAccount.Balance + depositAmount - 4200M;
-
-                            // User cannot input value less than 0
-                            if (depositAmount >= 0)
-                            {
-                                //  If AddMoney method returns false, the deposit is made but only up to $4200
-                                if (!bankAccount.AddMoney(depositAmount))
-                                {
-                                    // Line to be written to log
-                                    writeList.Add($"{DateTime.Now} ADD MONEY: {(depositAmount - overageAmount).ToString("C")} {bankAccount.Balance.ToString("C")}");
-
-                                    Console.WriteLine($"You can only have a maximum of $4,200.00.");
-                                    Console.WriteLine($"Only {(depositAmount - overageAmount).ToString("C")} was deposited to your account.");
-                                }
-
-                                // If AddMoney returns true, the deposit is made
-                                else
-                                {
-                                    // Line to be written to log
-                                    writeList.Add($"{DateTime.Now} ADD MONEY: {depositAmount.ToString("C")} {bankAccount.Balance.ToString("C")}");
-                                    Console.WriteLine();
-                                    Console.WriteLine($"{depositAmount.ToString("C")} has been deposited to your account.");
-                                }
-                                Console.WriteLine();
-                            }
-                            else
-                            {
-                                Console.WriteLine("Please enter a positive value.");
-                            }
-                        }
-                        catch (FormatException exc)
-                        {
-                            Console.WriteLine("Please enter a valid deposit amount.");
-                            Console.WriteLine();
-                        }
+                        AddMoney(writeList);
                         break;
 
                     //Catering app
                     case "2":
-                        try
-                        {
-                            Console.Write("Please input a product ID: ");
-                            string userInputID = Console.ReadLine().ToUpper();
-
-                            Console.WriteLine();
-
-                            Console.Write("Please input your desired quantity: ");
-
-                            int userInputQuantity = int.Parse(Console.ReadLine());
-                            Console.WriteLine();
-
-                            // Ensures user cannot input an order for 0 or less
-                            if (userInputQuantity > 0)
-                            {
-                                decimal currentBalance = bankAccount.Balance;
-                                string[] orderProducts = new string[3];
-                                orderProducts = catering.SelectProducts(userInputID, userInputQuantity, currentBalance);
-
-                                if (orderProducts[0] == "Order added")
-                                {
-                                    bankAccount.SubtractFromBalance(Convert.ToDecimal(orderProducts[1]));
-
-                                    // Line to be written to log
-                                    writeList.Add($"{DateTime.Now} {userInputQuantity} {orderProducts[2]} {userInputID} {Convert.ToDecimal(orderProducts[1]).ToString("C")} {bankAccount.Balance.ToString("C")}");
-                                }
-
-                                Console.WriteLine(orderProducts[0]);
-                                Console.WriteLine();
-                            }
-                            else
-                            {
-                                Console.WriteLine("Desired quantity must be greater than 0.");
-                            }
-                        }
-                        catch (FormatException exc)
-                        {
-                            Console.WriteLine("Please enter a valid product ID and quantity.");
-                            Console.WriteLine();
-                        }
+                        SelectProducts(writeList);
                         break;
 
                     case "3":
-                        // Closing actions
-
-                        // Line to be written to log
-                        writeList.Add($"{DateTime.Now} GIVE CHANGE: {bankAccount.Balance.ToString("C")} $0.00");
-
-                        // Writing list to log
-                        fileAccess.WriteInventoryFile(writeList);
-
-                        bankAccount.SetBalanceToZero();
-
-                        // Displays purchases made before transaction was completed
-                        foreach (string orderedItem in catering.orderList)
-                        {
-                            Console.WriteLine(catering.OrderReport(orderedItem));
-                        }
-                        Console.WriteLine();
-                        Console.WriteLine(catering.OrderTotal());
-                        Console.WriteLine();
-
-                        // Display change
-                        Console.WriteLine();
-                        Console.WriteLine("Change owed");
-                        Console.WriteLine(bankAccount.MakeChange(runningBalance));
-                        Console.WriteLine("Press enter key to continue...");
-                        Console.ReadLine();
-                        done = true;
+                        done = CompleteTransaction(writeList, runningBalance);
                         break;
 
                     default:
                         break;
                 }
+            }
+        }
+
+        private bool CompleteTransaction(List<string> writeList, decimal runningBalance)
+        {
+            bool done;
+            // Closing actions
+
+            // Line to be written to log
+            writeList.Add($"{DateTime.Now} GIVE CHANGE: {bankAccount.Balance.ToString("C")} $0.00");
+
+            // Writing list to log
+            fileAccess.WriteInventoryFile(writeList);
+
+            bankAccount.SetBalanceToZero();
+
+            // Displays purchases made before transaction was completed
+            foreach (string orderedItem in catering.orderList)
+            {
+                Console.WriteLine(catering.OrderReport(orderedItem));
+            }
+            Console.WriteLine();
+            Console.WriteLine(catering.OrderTotal());
+            Console.WriteLine();
+
+            // Display change
+            Console.WriteLine();
+            Console.WriteLine("Change owed");
+            Console.WriteLine(bankAccount.MakeChange(runningBalance));
+            Console.WriteLine("Press enter key to continue...");
+            Console.ReadLine();
+
+            catering.orderList.Clear();
+            done = true;
+            return done;
+        }
+
+        private void SelectProducts(List<string> writeList)
+        {
+            try
+            {
+                Console.Write("Please input a product ID: ");
+                string userInputID = Console.ReadLine().ToUpper();
+
+                Console.WriteLine();
+
+                Console.Write("Please input your desired quantity: ");
+
+                int userInputQuantity = int.Parse(Console.ReadLine());
+                Console.WriteLine();
+
+                // Ensures user cannot input an order for 0 or less
+                if (userInputQuantity > 0)
+                {
+                    decimal currentBalance = bankAccount.Balance;
+                    string[] orderProducts = new string[3];
+                    orderProducts = catering.SelectProducts(userInputID, userInputQuantity, currentBalance);
+
+                    if (orderProducts[0] == "Order added")
+                    {
+                        bankAccount.SubtractFromBalance(Convert.ToDecimal(orderProducts[1]));
+
+                        // Line to be written to log
+                        writeList.Add($"{DateTime.Now} {userInputQuantity} {orderProducts[2]} {userInputID} {Convert.ToDecimal(orderProducts[1]).ToString("C")} {bankAccount.Balance.ToString("C")}");
+                    }
+
+                    Console.WriteLine(orderProducts[0]);
+                    Console.WriteLine();
+                }
+                else
+                {
+                    Console.WriteLine("Desired quantity must be greater than 0.");
+                }
+            }
+            catch (FormatException exc)
+            {
+                Console.WriteLine("Please enter a valid product ID and quantity.");
+                Console.WriteLine();
+            }
+        }
+
+        private void AddMoney(List<string> writeList)
+        {
+            try
+            {
+
+                Console.Write("How much money would you like to deposit?: ");
+                decimal depositAmount = decimal.Parse(Console.ReadLine()); ;
+                decimal overageAmount = bankAccount.Balance + depositAmount - 4200M;
+
+                // User cannot input value less than 0
+                if (depositAmount >= 0)
+                {
+                    //  If AddMoney method returns false, the deposit is made but only up to $4200
+                    if (!bankAccount.AddMoney(depositAmount))
+                    {
+                        // Line to be written to log
+                        writeList.Add($"{DateTime.Now} ADD MONEY: {(depositAmount - overageAmount).ToString("C")} {bankAccount.Balance.ToString("C")}");
+
+                        Console.WriteLine($"You can only have a maximum of $4,200.00.");
+                        Console.WriteLine($"Only {(depositAmount - overageAmount).ToString("C")} was deposited to your account.");
+                    }
+
+                    // If AddMoney returns true, the deposit is made
+                    else
+                    {
+                        // Line to be written to log
+                        writeList.Add($"{DateTime.Now} ADD MONEY: {depositAmount.ToString("C")} {bankAccount.Balance.ToString("C")}");
+                        Console.WriteLine();
+                        Console.WriteLine($"{depositAmount.ToString("C")} has been deposited to your account.");
+                    }
+                    Console.WriteLine();
+                }
+                else
+                {
+                    Console.WriteLine("Please enter a positive value.");
+                }
+            }
+            catch (FormatException exc)
+            {
+                Console.WriteLine("Please enter a valid deposit amount.");
+                Console.WriteLine();
             }
         }
     }

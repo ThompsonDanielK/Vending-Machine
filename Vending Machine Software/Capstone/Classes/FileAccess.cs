@@ -21,7 +21,6 @@ namespace Capstone.Classes
       /// <param name="catering"></param>
         public void ReadInventoryFile(Catering catering)
         {
-        List<CateringItem> inventoryList = new List<CateringItem>(); //Do we even need this?**
             try
             {
 
