@@ -38,16 +38,14 @@ namespace Capstone.Classes
                     if (product.Quantity == 0)
                     {
                         cateringItem.Quantity = 0;
-                        return cateringItem;
-                        //return new string[] { "Out of stock", "0" };
+                        return cateringItem;                        
                     }
 
                     // If the user tries to order more than what's in stock
                     else if (userInputQuantity > product.Quantity)
                     {
                         cateringItem.Quantity = -1;
-                        return cateringItem;
-                        //return new string[] { "Order quantity exceeds in-stock quantity", "0" };
+                        return cateringItem;                       
                     }
 
                     // This checks if the user has enough money and if so, it processes the purchase
@@ -60,21 +58,18 @@ namespace Capstone.Classes
                         CateringItem success = new CateringItem(product.ItemType, product.ProductCode, product.Name, product.Price * userInputQuantity);
                         success.Quantity = userInputQuantity;
 
-                        return success;
+                        return success;                       
                         
-                        //return new string[] { "Order added", $"{userInputQuantity * product.Price}", $"{product.Name}" };
                     }
 
                     // If the price of the desired quantity exceeds the users balance, it returns a message
                     else if (customerBalance < product.Price * userInputQuantity)
                     {
-                        cateringItem.Quantity = -2;
-                        //return new string[] { "Your account balance is too low to select these products", "0" };
+                        cateringItem.Quantity = -2;                        
                     }
                 }
             }
-            return cateringItem;
-            //return new string[] { "No matching product ID found", "0" };
+            return cateringItem;            
         }
 
         /// <summary>
